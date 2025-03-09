@@ -62,8 +62,8 @@ import { TelemetrySetting } from "../../shared/TelemetrySetting"
  */
 
 export class ClineProvider implements vscode.WebviewViewProvider {
-	public static readonly sideBarId = "roo-cline.SidebarProvider" // used in package.json as the view's id. This value cannot be changed due to how vscode caches views based on their id, and updating the id would break existing instances of the extension.
-	public static readonly tabPanelId = "roo-cline.TabPanelProvider"
+	public static readonly sideBarId = "roo-cline-auto.SidebarProvider" // used in package.json as the view's id. This value cannot be changed due to how vscode caches views based on their id, and updating the id would break existing instances of the extension.
+	public static readonly tabPanelId = "roo-cline-auto.TabPanelProvider"
 	private static activeInstances: Set<ClineProvider> = new Set()
 	private disposables: vscode.Disposable[] = []
 	private view?: vscode.WebviewView | vscode.WebviewPanel
@@ -284,7 +284,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 
 		// If no visible provider, try to show the sidebar view
 		if (!visibleProvider) {
-			await vscode.commands.executeCommand("roo-cline.SidebarProvider.focus")
+			await vscode.commands.executeCommand("roo-cline-auto.SidebarProvider.focus")
 			// Wait briefly for the view to become visible
 			await delay(100)
 			visibleProvider = ClineProvider.getVisibleInstance()
@@ -986,6 +986,10 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						break
 					case "alwaysAllowFinishTask":
 						await this.updateGlobalState("alwaysAllowFinishTask", message.bool)
+						await this.postStateToWebview()
+						break
+					case "alwaysAllowCommandOutput":
+						await this.updateGlobalState("alwaysAllowCommandOutput", message.bool)
 						await this.postStateToWebview()
 						break
 					case "askResponse":
@@ -2182,6 +2186,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 			alwaysAllowMcp,
 			alwaysAllowModeSwitch,
 			alwaysAllowFinishTask,
+			alwaysAllowCommandOutput,
 			soundEnabled,
 			diffEnabled,
 			enableCheckpoints,
@@ -2230,6 +2235,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 			alwaysAllowMcp: alwaysAllowMcp ?? false,
 			alwaysAllowModeSwitch: alwaysAllowModeSwitch ?? false,
 			alwaysAllowFinishTask: alwaysAllowFinishTask ?? false,
+			alwaysAllowCommandOutput: alwaysAllowCommandOutput ?? true,
 			uriScheme: vscode.env.uriScheme,
 			currentTaskItem: this.getCurrentCline()?.taskId
 				? (taskHistory || []).find((item: HistoryItem) => item.id === this.getCurrentCline()?.taskId)
@@ -2392,6 +2398,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 			alwaysAllowMcp: stateValues.alwaysAllowMcp ?? false,
 			alwaysAllowModeSwitch: stateValues.alwaysAllowModeSwitch ?? false,
 			alwaysAllowFinishTask: stateValues.alwaysAllowFinishTask ?? false,
+			alwaysAllowCommandOutput: stateValues.alwaysAllowCommandOutput ?? true,
 			taskHistory: stateValues.taskHistory,
 			allowedCommands: stateValues.allowedCommands,
 			soundEnabled: stateValues.soundEnabled ?? false,

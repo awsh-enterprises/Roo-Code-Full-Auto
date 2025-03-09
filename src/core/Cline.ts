@@ -927,7 +927,8 @@ export class Cline {
 	// Tools
 
 	async executeCommandTool(command: string): Promise<[boolean, ToolResponse]> {
-		const { terminalOutputLimit } = (await this.providerRef.deref()?.getState()) ?? {}
+		const { terminalOutputLimit, autoApprovalEnabled, alwaysAllowCommandOutput } =
+			(await this.providerRef.deref()?.getState()) ?? {}
 
 		const terminalInfo = await this.terminalManager.getOrCreateTerminal(cwd)
 		// Weird visual bug when creating new terminals (even manually) where
@@ -940,6 +941,13 @@ export class Cline {
 
 		const sendCommandOutput = async (line: string) => {
 			try {
+				// Auto-approve command output if enabled
+				if (alwaysAllowCommandOutput) {
+					didContinue = true
+					process.continue() // Continue past the await.
+					return
+				}
+
 				const { response, text, images } = await this.ask("command_output", line)
 
 				if (response === "yesButtonClicked") {

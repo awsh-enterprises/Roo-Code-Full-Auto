@@ -62,6 +62,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		autoApprovalEnabled,
 		alwaysAllowModeSwitch,
 		alwaysAllowFinishTask,
+		alwaysAllowCommandOutput,
 		customModes,
 		telemetrySetting,
 	} = useExtensionState()
@@ -650,7 +651,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						JSON.parse(message.text || "{}")?.tool === "newTask")) ||
 				(alwaysAllowFinishTask &&
 					message.ask === "tool" &&
-					JSON.parse(message.text || "{}")?.tool === "finishTask")
+					JSON.parse(message.text || "{}")?.tool === "finishTask") ||
+				(alwaysAllowCommandOutput && message.ask === "command_output")
 			)
 		},
 		[
@@ -666,6 +668,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			isMcpToolAlwaysAllowed,
 			alwaysAllowModeSwitch,
 			alwaysAllowFinishTask,
+			alwaysAllowCommandOutput,
 		],
 	)
 
