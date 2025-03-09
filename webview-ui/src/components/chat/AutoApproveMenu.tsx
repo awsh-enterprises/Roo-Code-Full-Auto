@@ -32,6 +32,8 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 		setAlwaysAllowModeSwitch,
 		alwaysAllowFinishTask,
 		setAlwaysAllowFinishTask,
+		alwaysAllowCommandOutput,
+		setAlwaysAllowCommandOutput,
 		alwaysApproveResubmit,
 		setAlwaysApproveResubmit,
 		autoApprovalEnabled,
@@ -60,6 +62,13 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 			enabled: alwaysAllowExecute ?? false,
 			description:
 				"Allows execution of approved terminal commands. You can configure this in the settings panel.",
+		},
+		{
+			id: "commandOutput",
+			label: "Continue while commands run",
+			shortName: "CmdOutput",
+			enabled: alwaysAllowCommandOutput ?? false,
+			description: "Automatically continue execution while commands are running without prompting.",
 		},
 		{
 			id: "useBrowser",
@@ -151,6 +160,12 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 		vscode.postMessage({ type: "alwaysAllowFinishTask", bool: newValue })
 	}, [alwaysAllowFinishTask, setAlwaysAllowFinishTask])
 
+	const handleCommandOutputChange = useCallback(() => {
+		const newValue = !(alwaysAllowCommandOutput ?? false)
+		setAlwaysAllowCommandOutput(newValue)
+		vscode.postMessage({ type: "alwaysAllowCommandOutput", bool: newValue })
+	}, [alwaysAllowCommandOutput, setAlwaysAllowCommandOutput])
+
 	const handleRetryChange = useCallback(() => {
 		const newValue = !(alwaysApproveResubmit ?? false)
 		setAlwaysApproveResubmit(newValue)
@@ -162,6 +177,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 		readFiles: handleReadOnlyChange,
 		editFiles: handleWriteChange,
 		executeCommands: handleExecuteChange,
+		commandOutput: handleCommandOutputChange,
 		useBrowser: handleBrowserChange,
 		useMcp: handleMcpChange,
 		switchModes: handleModeSwitchChange,

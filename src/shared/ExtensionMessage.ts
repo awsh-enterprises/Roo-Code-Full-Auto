@@ -110,6 +110,7 @@ export interface ExtensionState {
 	alwaysApproveResubmit?: boolean
 	alwaysAllowModeSwitch?: boolean
 	alwaysAllowFinishTask?: boolean
+	alwaysAllowCommandOutput?: boolean
 	browserToolEnabled?: boolean
 	requestDelaySeconds: number
 	rateLimitSeconds: number // Minimum time between successive requests (0 = disabled)

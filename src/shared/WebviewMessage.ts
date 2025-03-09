@@ -49,6 +49,7 @@ export interface WebviewMessage {
 		| "alwaysAllowMcp"
 		| "alwaysAllowModeSwitch"
 		| "alwaysAllowFinishTask"
+		| "alwaysAllowCommandOutput"
 		| "playSound"
 		| "soundEnabled"
 		| "soundVolume"
