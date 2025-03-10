@@ -31,6 +31,11 @@ export interface ExtensionStateContextType extends ExtensionState {
 	setAlwaysAllowBrowser: (value: boolean) => void
 	setAlwaysAllowMcp: (value: boolean) => void
 	setAlwaysAllowModeSwitch: (value: boolean) => void
+	setAlwaysAllowFinishTask: (value: boolean) => void
+	alwaysAllowFinishTask?: boolean
+	showProceedWhileRunning?: boolean
+	setShowProceedWhileRunning: (value: boolean) => void
+	alwaysAllowSubtasks?: boolean
 	setAlwaysAllowSubtasks: (value: boolean) => void
 	setBrowserToolEnabled: (value: boolean) => void
 	setShowRooIgnoredFiles: (value: boolean) => void
@@ -53,8 +58,6 @@ export interface ExtensionStateContextType extends ExtensionState {
 	setMcpEnabled: (value: boolean) => void
 	enableMcpServerCreation: boolean
 	setEnableMcpServerCreation: (value: boolean) => void
-	enableCustomModeCreation?: boolean
-	setEnableCustomModeCreation: (value: boolean) => void
 	alwaysApproveResubmit?: boolean
 	setAlwaysApproveResubmit: (value: boolean) => void
 	requestDelaySeconds: number
@@ -120,7 +123,6 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		checkpointStorage: "task",
 		fuzzyMatchThreshold: 1.0,
 		preferredLanguage: "English",
-		enableCustomModeCreation: true,
 		writeDelayMs: 1000,
 		browserViewportSize: "900x600",
 		screenshotQuality: 75,
@@ -144,6 +146,8 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		browserToolEnabled: true,
 		telemetrySetting: "unset",
 		showRooIgnoredFiles: true, // Default to showing .rooignore'd files with lock symbol (current behavior)
+		showProceedWhileRunning: true, // Default to showing the "Proceed While Running" button
+		alwaysAllowSubtasks: false, // Default to not auto-approving subtasks
 	})
 
 	const [didHydrateState, setDidHydrateState] = useState(false)
@@ -251,6 +255,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		setAlwaysAllowBrowser: (value) => setState((prevState) => ({ ...prevState, alwaysAllowBrowser: value })),
 		setAlwaysAllowMcp: (value) => setState((prevState) => ({ ...prevState, alwaysAllowMcp: value })),
 		setAlwaysAllowModeSwitch: (value) => setState((prevState) => ({ ...prevState, alwaysAllowModeSwitch: value })),
+		setAlwaysAllowFinishTask: (value) => setState((prevState) => ({ ...prevState, alwaysAllowFinishTask: value })),
 		setAlwaysAllowSubtasks: (value) => setState((prevState) => ({ ...prevState, alwaysAllowSubtasks: value })),
 		setShowAnnouncement: (value) => setState((prevState) => ({ ...prevState, shouldShowAnnouncement: value })),
 		setAllowedCommands: (value) => setState((prevState) => ({ ...prevState, allowedCommands: value })),
@@ -278,14 +283,14 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		setCustomSupportPrompts: (value) => setState((prevState) => ({ ...prevState, customSupportPrompts: value })),
 		setEnhancementApiConfigId: (value) =>
 			setState((prevState) => ({ ...prevState, enhancementApiConfigId: value })),
-		setEnableCustomModeCreation: (value) =>
-			setState((prevState) => ({ ...prevState, enableCustomModeCreation: value })),
 		setAutoApprovalEnabled: (value) => setState((prevState) => ({ ...prevState, autoApprovalEnabled: value })),
 		setCustomModes: (value) => setState((prevState) => ({ ...prevState, customModes: value })),
 		setMaxOpenTabsContext: (value) => setState((prevState) => ({ ...prevState, maxOpenTabsContext: value })),
 		setBrowserToolEnabled: (value) => setState((prevState) => ({ ...prevState, browserToolEnabled: value })),
 		setTelemetrySetting: (value) => setState((prevState) => ({ ...prevState, telemetrySetting: value })),
 		setShowRooIgnoredFiles: (value) => setState((prevState) => ({ ...prevState, showRooIgnoredFiles: value })),
+		setShowProceedWhileRunning: (value) =>
+			setState((prevState) => ({ ...prevState, showProceedWhileRunning: value })),
 	}
 
 	return <ExtensionStateContext.Provider value={contextValue}>{children}</ExtensionStateContext.Provider>

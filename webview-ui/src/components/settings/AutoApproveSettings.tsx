@@ -21,6 +21,7 @@ type AutoApproveSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	alwaysAllowSubtasks?: boolean
 	alwaysAllowExecute?: boolean
 	allowedCommands?: string[]
+	showProceedWhileRunning?: boolean
 	setCachedStateField: SetCachedStateField<keyof ExtensionStateContextType>
 }
 
@@ -36,6 +37,7 @@ export const AutoApproveSettings = ({
 	alwaysAllowSubtasks,
 	alwaysAllowExecute,
 	allowedCommands,
+	showProceedWhileRunning,
 	setCachedStateField,
 	className,
 	...props
@@ -190,6 +192,18 @@ export const AutoApproveSettings = ({
 					</VSCodeCheckbox>
 					<p className="text-vscode-descriptionForeground text-sm mt-0">
 						Allow creation and completion of subtasks without requiring approval
+					</p>
+				</div>
+
+				<div>
+					<VSCodeCheckbox
+						checked={showProceedWhileRunning}
+						onChange={(e: any) => setCachedStateField("showProceedWhileRunning", e.target.checked)}>
+						<span className="font-medium">Show "Proceed While Running" button</span>
+					</VSCodeCheckbox>
+					<p className="text-vscode-descriptionForeground text-sm mt-0">
+						Show the "Proceed While Running" button for command outputs, allowing users to continue while
+						commands are still executing
 					</p>
 				</div>
 

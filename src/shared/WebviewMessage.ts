@@ -102,6 +102,7 @@ export interface WebviewMessage {
 		| "browserToolEnabled"
 		| "telemetrySetting"
 		| "showRooIgnoredFiles"
+		| "showProceedWhileRunning"
 	text?: string
 	disabled?: boolean
 	askResponse?: ClineAskResponse
