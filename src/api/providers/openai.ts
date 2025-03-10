@@ -92,6 +92,7 @@ export class OpenAiHandler extends BaseProvider implements SingleCompletionHandl
 				messages: convertedMessages,
 				stream: true as const,
 				stream_options: { include_usage: true },
+				// Only include tools when we have actual tools to use
 			}
 			if (this.options.includeMaxTokens) {
 				requestOptions.max_tokens = modelInfo.maxTokens
@@ -131,6 +132,7 @@ export class OpenAiHandler extends BaseProvider implements SingleCompletionHandl
 				messages: deepseekReasoner
 					? convertToR1Format([{ role: "user", content: systemPrompt }, ...messages])
 					: [systemMessage, ...convertToOpenAiMessages(messages)],
+				// Only include tools when we have actual tools to use
 			}
 
 			const response = await this.client.chat.completions.create(requestOptions)
@@ -163,6 +165,7 @@ export class OpenAiHandler extends BaseProvider implements SingleCompletionHandl
 			const requestOptions: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming = {
 				model: this.getModel().id,
 				messages: [{ role: "user", content: prompt }],
+				// No tools parameter - only include when we have actual tools to use
 			}
 
 			const response = await this.client.chat.completions.create(requestOptions)
@@ -193,6 +196,7 @@ export class OpenAiHandler extends BaseProvider implements SingleCompletionHandl
 				stream: true,
 				stream_options: { include_usage: true },
 				reasoning_effort: this.getModel().info.reasoningEffort,
+				// Only include tools when we have actual tools to use
 			})
 
 			yield* this.handleStreamResponse(stream)
@@ -206,6 +210,7 @@ export class OpenAiHandler extends BaseProvider implements SingleCompletionHandl
 					},
 					...convertToOpenAiMessages(messages),
 				],
+				// Only include tools when we have actual tools to use
 			}
 
 			const response = await this.client.chat.completions.create(requestOptions)

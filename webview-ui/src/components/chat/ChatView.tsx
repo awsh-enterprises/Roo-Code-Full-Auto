@@ -927,7 +927,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						href="#"
 						onClick={(e) => {
 							e.preventDefault()
-							window.postMessage({ type: "action", action: "settingsButtonClicked" }, "*")
+							vscode.postMessage({ type: "settingsButtonClicked" })
 						}}
 						className="inline px-0.5">
 						disable checkpoints in settings

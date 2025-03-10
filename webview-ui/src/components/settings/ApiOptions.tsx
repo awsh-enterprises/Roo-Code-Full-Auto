@@ -1066,6 +1066,119 @@ const ApiOptions = ({
 							Get DeepSeek API Key
 						</VSCodeButtonLink>
 					)}
+					<ModelPicker
+						apiConfiguration={apiConfiguration}
+						setApiConfigurationField={setApiConfigurationField}
+						defaultModelId={deepSeekDefaultModelId}
+						defaultModelInfo={deepSeekModels[deepSeekDefaultModelId]}
+						models={deepSeekModels}
+						modelIdKey="deepSeekModelId"
+						modelInfoKey="deepSeekCustomModelInfo"
+						serviceName="DeepSeek"
+						serviceUrl="https://api-docs.deepseek.com/"
+					/>
+
+					<div className="flex flex-col gap-3 mt-2 border-t border-vscode-panel-border pt-3">
+						<div className="font-medium">Advanced DeepSeek Options</div>
+
+						<div>
+							<div className="flex items-center gap-1">
+								<Checkbox
+									checked={(apiConfiguration as any)?.deepSeekJsonMode ?? false}
+									onChange={handleInputChange("deepSeekJsonMode", noTransform)}>
+									<span className="font-medium">JSON Mode</span>
+								</Checkbox>
+								<i
+									className="codicon codicon-info text-vscode-descriptionForeground"
+									title="Forces the model to return responses in valid JSON format. Useful for structured data responses."
+									style={{ fontSize: "12px" }}
+								/>
+							</div>
+							<div className="text-sm text-vscode-descriptionForeground">
+								Forces the model to return responses in valid JSON format.
+							</div>
+						</div>
+
+						<div>
+							<div className="flex items-center gap-1">
+								<Checkbox
+									checked={(apiConfiguration as any)?.deepSeekEnableKvCache ?? false}
+									onChange={handleInputChange("deepSeekEnableKvCache", noTransform)}>
+									<span className="font-medium">Enable KV Cache</span>
+								</Checkbox>
+								<i
+									className="codicon codicon-info text-vscode-descriptionForeground"
+									title="Enables key-value caching to improve performance and reduce token usage for repeated content."
+									style={{ fontSize: "12px" }}
+								/>
+							</div>
+							<div className="text-sm text-vscode-descriptionForeground">
+								Enables key-value caching to improve performance and reduce token usage.
+							</div>
+						</div>
+
+						<div>
+							<div className="flex items-center gap-1">
+								<Checkbox
+									checked={(apiConfiguration as any)?.deepSeekEnableFunctionCalling ?? false}
+									onChange={(checked) => {
+										setApiConfigurationField("deepSeekEnableFunctionCalling", checked)
+										// If disabling function calling, also disable forced function calling
+										if (!checked) {
+											setApiConfigurationField("deepSeekForceFunctionCalling", false)
+										}
+									}}>
+									<span className="font-medium">Enable Function Calling</span>
+								</Checkbox>
+								<i
+									className="codicon codicon-info text-vscode-descriptionForeground"
+									title="Enables the model to call functions defined in the prompt. Useful for structured interactions."
+									style={{ fontSize: "12px" }}
+								/>
+							</div>
+							<div className="text-sm text-vscode-descriptionForeground">
+								Enables the model to call functions defined in the prompt.
+							</div>
+						</div>
+
+						{(apiConfiguration as any)?.deepSeekEnableFunctionCalling && (
+							<div className="ml-6">
+								<div className="flex items-center gap-1">
+									<Checkbox
+										checked={(apiConfiguration as any)?.deepSeekForceFunctionCalling ?? false}
+										onChange={handleInputChange("deepSeekForceFunctionCalling", noTransform)}>
+										<span className="font-medium">Force Function Calling</span>
+									</Checkbox>
+									<i
+										className="codicon codicon-info text-vscode-descriptionForeground"
+										title="Forces the model to always call a function instead of generating text responses."
+										style={{ fontSize: "12px" }}
+									/>
+								</div>
+								<div className="text-sm text-vscode-descriptionForeground">
+									Forces the model to always call a function instead of generating text.
+								</div>
+							</div>
+						)}
+
+						<div className="text-sm text-vscode-descriptionForeground mt-2">
+							<a
+								href="https://api-docs.deepseek.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-vscode-textLink">
+								DeepSeek API Documentation
+							</a>
+							{" | "}
+							<a
+								href="https://status.deepseek.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-vscode-textLink">
+								DeepSeek API Status
+							</a>
+						</div>
+					</div>
 				</>
 			)}
 
@@ -1255,36 +1368,41 @@ const ApiOptions = ({
 				/>
 			)}
 
-			{selectedProviderModelOptions.length > 0 && (
-				<>
-					<div className="dropdown-container">
-						<label htmlFor="model-id" className="font-medium">
-							Model
-						</label>
-						<Dropdown
-							id="model-id"
-							value={selectedModelId}
-							onChange={(value) => {
-								setApiConfigurationField("apiModelId", typeof value == "string" ? value : value?.value)
-							}}
-							options={selectedProviderModelOptions}
-							className="w-full"
+			{selectedProviderModelOptions.length > 0 &&
+				// Only show the dropdown model selector for providers that don't use ModelPicker
+				!["deepseek", "openrouter", "glama", "unbound", "requesty"].includes(selectedProvider) && (
+					<>
+						<div className="dropdown-container">
+							<label htmlFor="model-id" className="font-medium">
+								Model
+							</label>
+							<Dropdown
+								id="model-id"
+								value={selectedModelId}
+								onChange={(value) => {
+									setApiConfigurationField(
+										"apiModelId",
+										typeof value == "string" ? value : value?.value,
+									)
+								}}
+								options={selectedProviderModelOptions}
+								className="w-full"
+							/>
+						</div>
+						<ModelInfoView
+							selectedModelId={selectedModelId}
+							modelInfo={selectedModelInfo}
+							isDescriptionExpanded={isDescriptionExpanded}
+							setIsDescriptionExpanded={setIsDescriptionExpanded}
 						/>
-					</div>
-					<ModelInfoView
-						selectedModelId={selectedModelId}
-						modelInfo={selectedModelInfo}
-						isDescriptionExpanded={isDescriptionExpanded}
-						setIsDescriptionExpanded={setIsDescriptionExpanded}
-					/>
-					<ThinkingBudget
-						key={`${selectedProvider}-${selectedModelId}`}
-						apiConfiguration={apiConfiguration}
-						setApiConfigurationField={setApiConfigurationField}
-						modelInfo={selectedModelInfo}
-					/>
-				</>
-			)}
+						<ThinkingBudget
+							key={`${selectedProvider}-${selectedModelId}`}
+							apiConfiguration={apiConfiguration}
+							setApiConfigurationField={setApiConfigurationField}
+							modelInfo={selectedModelInfo}
+						/>
+					</>
+				)}
 
 			{!fromWelcomeView && (
 				<TemperatureControl
@@ -1335,7 +1453,18 @@ export function normalizeApiConfiguration(apiConfiguration?: ApiConfiguration) {
 		case "gemini":
 			return getProviderData(geminiModels, geminiDefaultModelId)
 		case "deepseek":
-			return getProviderData(deepSeekModels, deepSeekDefaultModelId)
+			return {
+				selectedProvider: provider,
+				selectedModelId:
+					apiConfiguration?.deepSeekModelId || apiConfiguration?.apiModelId || deepSeekDefaultModelId,
+				selectedModelInfo:
+					apiConfiguration?.deepSeekCustomModelInfo ||
+					(apiConfiguration?.deepSeekModelId &&
+						deepSeekModels[apiConfiguration.deepSeekModelId as keyof typeof deepSeekModels]) ||
+					(apiConfiguration?.apiModelId &&
+						deepSeekModels[apiConfiguration.apiModelId as keyof typeof deepSeekModels]) ||
+					deepSeekModels[deepSeekDefaultModelId],
+			}
 		case "openai-native":
 			return getProviderData(openAiNativeModels, openAiNativeDefaultModelId)
 		case "mistral":

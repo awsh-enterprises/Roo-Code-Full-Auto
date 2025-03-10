@@ -7,6 +7,21 @@ interface ApiMetrics {
 	totalCacheReads?: number
 	totalCost: number
 	contextTokens: number // Total tokens in conversation (last message's tokensIn + tokensOut + cacheWrites + cacheReads)
+	totalDuration?: number // Total duration of all API requests in milliseconds
+	requestCount?: number // Total number of API requests
+	averageDuration?: number // Average duration per request in milliseconds
+	requestsByProvider?: Record<string, number> // Count of requests by provider
+	requestsByModel?: Record<string, number> // Count of requests by model
+	durationByProvider?: Record<string, number> // Total duration by provider
+	durationByModel?: Record<string, number> // Total duration by model
+	performanceHistory?: Array<{
+		ts: number
+		duration: number
+		tokensIn?: number
+		tokensOut?: number
+		provider?: string
+		modelId?: string
+	}>
 }
 
 /**
@@ -34,6 +49,14 @@ export function getApiMetrics(messages: ClineMessage[]): ApiMetrics {
 		totalCacheReads: undefined,
 		totalCost: 0,
 		contextTokens: 0,
+		totalDuration: 0,
+		requestCount: 0,
+		averageDuration: 0,
+		requestsByProvider: {},
+		requestsByModel: {},
+		durationByProvider: {},
+		durationByModel: {},
+		performanceHistory: [],
 	}
 
 	// Helper function to get total tokens from a message
@@ -59,7 +82,18 @@ export function getApiMetrics(messages: ClineMessage[]): ApiMetrics {
 	messages.forEach((message) => {
 		if (message.type === "say" && message.say === "api_req_started" && message.text) {
 			try {
-				const { tokensIn, tokensOut, cacheWrites, cacheReads, cost } = JSON.parse(message.text)
+				const {
+					tokensIn,
+					tokensOut,
+					cacheWrites,
+					cacheReads,
+					cost,
+					startTime,
+					endTime,
+					duration,
+					provider,
+					modelId,
+				} = JSON.parse(message.text)
 
 				if (typeof tokensIn === "number") {
 					result.totalTokensIn += tokensIn
@@ -77,6 +111,44 @@ export function getApiMetrics(messages: ClineMessage[]): ApiMetrics {
 					result.totalCost += cost
 				}
 
+				// Track performance metrics
+				result.requestCount! += 1
+
+				// Calculate duration either from provided duration or from start/end times
+				let requestDuration = 0
+				if (typeof duration === "number") {
+					requestDuration = duration
+				} else if (typeof startTime === "number" && typeof endTime === "number") {
+					requestDuration = endTime - startTime
+				}
+
+				if (requestDuration > 0) {
+					result.totalDuration! += requestDuration
+
+					// Add to performance history
+					result.performanceHistory!.push({
+						ts: message.ts,
+						duration: requestDuration,
+						tokensIn,
+						tokensOut,
+						provider,
+						modelId,
+					})
+
+					// Track by provider
+					if (provider) {
+						result.requestsByProvider![provider] = (result.requestsByProvider![provider] || 0) + 1
+						result.durationByProvider![provider] =
+							(result.durationByProvider![provider] || 0) + requestDuration
+					}
+
+					// Track by model
+					if (modelId) {
+						result.requestsByModel![modelId] = (result.requestsByModel![modelId] || 0) + 1
+						result.durationByModel![modelId] = (result.durationByModel![modelId] || 0) + requestDuration
+					}
+				}
+
 				// If this is the last api request with tokens, use its total for context size
 				if (message === lastApiReq) {
 					result.contextTokens = getTotalTokensFromMessage(message)
@@ -86,6 +158,11 @@ export function getApiMetrics(messages: ClineMessage[]): ApiMetrics {
 			}
 		}
 	})
+
+	// Calculate average duration
+	if (result.requestCount! > 0 && result.totalDuration! > 0) {
+		result.averageDuration = result.totalDuration! / result.requestCount!
+	}
 
 	return result
 }

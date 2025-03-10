@@ -3,7 +3,7 @@
 	"displayName": "Roo Code Auto",
 	"description": "A whole dev team of AI agents in your editor.",
 	"publisher": "RooVeterinaryInc",
-	"version": "3.8.2",
+	"version": "3.8.3",
 	"icon": "assets/icons/rocket.png",
 	"galleryBanner": {
 		"color": "#617A91",
@@ -105,6 +105,11 @@
 				"icon": "$(question)"
 			},
 			{
+				"command": "roo-cline-auto.performanceButtonClicked",
+				"title": "Performance",
+				"icon": "$(pulse)"
+			},
+			{
 				"command": "roo-cline-auto.openInNewTab",
 				"title": "Open In New Tab",
 				"category": "Roo Code Auto"
@@ -187,6 +192,11 @@
 				{
 					"command": "roo-cline-auto.helpButtonClicked",
 					"group": "navigation@7",
+					"when": "view == roo-cline-auto.SidebarProvider"
+				},
+				{
+					"command": "roo-cline-auto.performanceButtonClicked",
+					"group": "navigation@4.5",
 					"when": "view == roo-cline-auto.SidebarProvider"
 				}
 			]

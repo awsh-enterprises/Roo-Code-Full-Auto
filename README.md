@@ -44,7 +44,12 @@ Roo Code 3.8 is out with performance boosts, new features, and bug fixes.
 - Roo Code can run in multiple windows
 - Experimental multi-diff editing strategy
 - Subtask to parent task communication
-- Updated DeepSeek provider
+- Updated DeepSeek provider with support for DeepSeek-V3 models:
+    - deepseek-chat: General purpose model with 64K context window
+    - deepseek-reasoner: Specialized for complex reasoning tasks
+    - deepseek-coder: Specialized for programming tasks with 128K context window
+    - New capabilities: Function calling, JSON mode, and KV cache support
+    - Pricing: $0.27/million input tokens, $1.10/million output tokens
 - New "Human Relay" provider
 
 ---
@@ -124,9 +129,9 @@ Make Roo Code work your way with:
     ```
 
 if that fails, try:
-    ```bash
+`bash
     npm run install:ci
-    ```
+    `
 
 3. **Build** the extension:
     ```bash

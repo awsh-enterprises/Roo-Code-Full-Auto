@@ -1476,6 +1476,26 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						await this.updateGlobalState("browserToolEnabled", message.bool ?? true)
 						await this.postStateToWebview()
 						break
+					case "deepSeekJsonMode":
+						await this.updateGlobalState("deepSeekJsonMode", message.bool ?? false)
+						await this.postStateToWebview()
+						break
+					case "deepSeekEnableKvCache":
+						await this.updateGlobalState("deepSeekEnableKvCache", message.bool ?? false)
+						await this.postStateToWebview()
+						break
+					case "deepSeekEnableFunctionCalling":
+						await this.updateGlobalState("deepSeekEnableFunctionCalling", message.bool ?? false)
+						// If disabling function calling, also disable forced function calling
+						if (message.bool === false) {
+							await this.updateGlobalState("deepSeekForceFunctionCalling", false)
+						}
+						await this.postStateToWebview()
+						break
+					case "deepSeekForceFunctionCalling":
+						await this.updateGlobalState("deepSeekForceFunctionCalling", message.bool ?? false)
+						await this.postStateToWebview()
+						break
 					case "showRooIgnoredFiles":
 						await this.updateGlobalState("showRooIgnoredFiles", message.bool ?? true)
 						await this.postStateToWebview()
@@ -1808,6 +1828,10 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						const isOptedIn = telemetrySetting === "enabled"
 						telemetryService.updateTelemetryState(isOptedIn)
 						await this.postStateToWebview()
+						break
+					}
+					case "settingsButtonClicked": {
+						vscode.commands.executeCommand("roo-cline-auto.settingsButtonClicked")
 						break
 					}
 				}
