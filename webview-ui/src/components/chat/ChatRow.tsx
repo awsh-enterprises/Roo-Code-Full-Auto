@@ -258,7 +258,6 @@ export const ChatRowContent = ({
 							<span style={{ fontWeight: "bold" }}>Roo wants to edit this file:</span>
 						</div>
 						<CodeAccordian
-							progressStatus={message.progressStatus}
 							isLoading={message.partial}
 							diff={tool.diff!}
 							path={tool.path!}
@@ -452,7 +451,7 @@ export const ChatRowContent = ({
 						<div style={headerStyle}>
 							{toolIcon("new-file")}
 							<span style={{ fontWeight: "bold" }}>
-								Roo wants to create a new task in <code>{tool.mode}</code> mode:
+								Roo wants to create a new subtask in <code>{tool.mode}</code> mode:
 							</span>
 						</div>
 						<div style={{ paddingLeft: "26px", marginTop: "4px" }}>
@@ -464,8 +463,8 @@ export const ChatRowContent = ({
 				return (
 					<>
 						<div style={headerStyle}>
-							{toolIcon("new-file")}
-							<span style={{ fontWeight: "bold" }}>Roo wants to finish this task</span>
+							{toolIcon("checklist")}
+							<span style={{ fontWeight: "bold" }}>Roo wants to finish this subtask</span>
 						</div>
 						<div style={{ paddingLeft: "26px", marginTop: "4px" }}>
 							<code>{tool.content}</code>
