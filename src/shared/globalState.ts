@@ -40,7 +40,7 @@ export const GLOBAL_STATE_KEYS = [
 	"alwaysAllowBrowser",
 	"alwaysAllowMcp",
 	"alwaysAllowModeSwitch",
-	"alwaysAllowFinishTask",
+	"alwaysAllowSubtasks",
 	"taskHistory",
 	"openAiBaseUrl",
 	"openAiModelId",
@@ -85,6 +85,7 @@ export const GLOBAL_STATE_KEYS = [
 	"enhancementApiConfigId",
 	"experiments", // Map of experiment IDs to their enabled state
 	"autoApprovalEnabled",
+	"enableCustomModeCreation", // Enable the ability for Roo to create custom modes
 	"customModes", // Array of custom modes
 	"unboundModelId",
 	"requestyModelId",

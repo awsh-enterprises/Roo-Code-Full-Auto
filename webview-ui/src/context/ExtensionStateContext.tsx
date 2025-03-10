@@ -32,8 +32,11 @@ export interface ExtensionStateContextType extends ExtensionState {
 	setAlwaysAllowMcp: (value: boolean) => void
 	setAlwaysAllowModeSwitch: (value: boolean) => void
 	setAlwaysAllowFinishTask: (value: boolean) => void
+	alwaysAllowFinishTask?: boolean
 	showProceedWhileRunning?: boolean
 	setShowProceedWhileRunning: (value: boolean) => void
+	alwaysAllowSubtasks?: boolean
+	setAlwaysAllowSubtasks: (value: boolean) => void
 	setBrowserToolEnabled: (value: boolean) => void
 	setShowRooIgnoredFiles: (value: boolean) => void
 	setShowAnnouncement: (value: boolean) => void
@@ -144,6 +147,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		telemetrySetting: "unset",
 		showRooIgnoredFiles: true, // Default to showing .rooignore'd files with lock symbol (current behavior)
 		showProceedWhileRunning: true, // Default to showing the "Proceed While Running" button
+		alwaysAllowSubtasks: false, // Default to not auto-approving subtasks
 	})
 
 	const [didHydrateState, setDidHydrateState] = useState(false)
@@ -252,6 +256,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		setAlwaysAllowMcp: (value) => setState((prevState) => ({ ...prevState, alwaysAllowMcp: value })),
 		setAlwaysAllowModeSwitch: (value) => setState((prevState) => ({ ...prevState, alwaysAllowModeSwitch: value })),
 		setAlwaysAllowFinishTask: (value) => setState((prevState) => ({ ...prevState, alwaysAllowFinishTask: value })),
+		setAlwaysAllowSubtasks: (value) => setState((prevState) => ({ ...prevState, alwaysAllowSubtasks: value })),
 		setShowAnnouncement: (value) => setState((prevState) => ({ ...prevState, shouldShowAnnouncement: value })),
 		setAllowedCommands: (value) => setState((prevState) => ({ ...prevState, allowedCommands: value })),
 		setSoundEnabled: (value) => setState((prevState) => ({ ...prevState, soundEnabled: value })),
