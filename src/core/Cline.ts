@@ -919,7 +919,8 @@ export class Cline {
 	// Tools
 
 	async executeCommandTool(command: string): Promise<[boolean, ToolResponse]> {
-		const { terminalOutputLimit } = (await this.providerRef.deref()?.getState()) ?? {}
+		const { terminalOutputLimit, autoApprovalEnabled, alwaysAllowCommandOutput } =
+			(await this.providerRef.deref()?.getState()) ?? {}
 
 		const terminalInfo = await this.terminalManager.getOrCreateTerminal(cwd)
 		// Weird visual bug when creating new terminals (even manually) where
@@ -932,6 +933,13 @@ export class Cline {
 
 		const sendCommandOutput = async (line: string) => {
 			try {
+				// Auto-approve command output if enabled
+				if (alwaysAllowCommandOutput) {
+					didContinue = true
+					process.continue() // Continue past the await.
+					return
+				}
+
 				const { response, text, images } = await this.ask("command_output", line)
 
 				if (response === "yesButtonClicked") {
@@ -3165,6 +3173,9 @@ export class Cline {
 			// fortunately api_req_finished was always parsed out for the gui anyways, so it remains solely for legacy purposes to keep track of prices in tasks from history
 			// (it's worth removing a few months from now)
 			const updateApiReqMsg = (cancelReason?: ClineApiReqCancelReason, streamingFailedMessage?: string) => {
+				const endTime = Date.now()
+				const duration = endTime - startTime
+
 				this.clineMessages[lastApiReqIndex].text = JSON.stringify({
 					...JSON.parse(this.clineMessages[lastApiReqIndex].text || "{}"),
 					tokensIn: inputTokens,
@@ -3180,6 +3191,11 @@ export class Cline {
 							cacheWriteTokens,
 							cacheReadTokens,
 						),
+					startTime,
+					endTime,
+					duration,
+					provider: this.apiConfiguration.apiProvider,
+					modelId: this.api.getModel().id,
 					cancelReason,
 					streamingFailedMessage,
 				} satisfies ClineApiReqInfo)
@@ -3236,6 +3252,9 @@ export class Cline {
 			this.presentAssistantMessageLocked = false
 			this.presentAssistantMessageHasPendingUpdates = false
 			await this.diffViewProvider.reset()
+
+			// Track API request timing
+			const startTime = Date.now()
 
 			const stream = this.attemptApiRequest(previousApiReqIndex) // yields only if the first chunk is successful, otherwise will allow the user to retry the request (most likely due to rate limit error, which gets thrown on the first chunk)
 			let assistantMessage = ""

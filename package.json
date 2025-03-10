@@ -1,6 +1,6 @@
 {
-	"name": "roo-cline",
-	"displayName": "Roo Code (prev. Roo Cline)",
+	"name": "roo-cline-auto",
+	"displayName": "Roo Code Auto",
 	"description": "A whole dev team of AI agents in your editor.",
 	"publisher": "RooVeterinaryInc",
 	"version": "3.8.4",
@@ -53,148 +53,158 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "roo-cline-ActivityBar",
-					"title": "Roo Code",
+					"id": "roo-cline-auto-ActivityBar",
+					"title": "Roo Code Auto",
 					"icon": "$(rocket)"
 				}
 			]
 		},
 		"views": {
-			"roo-cline-ActivityBar": [
+			"roo-cline-auto-ActivityBar": [
 				{
 					"type": "webview",
-					"id": "roo-cline.SidebarProvider",
+					"id": "roo-cline-auto.SidebarProvider",
 					"name": ""
 				}
 			]
 		},
 		"commands": [
 			{
-				"command": "roo-cline.plusButtonClicked",
+				"command": "roo-cline-auto.plusButtonClicked",
 				"title": "New Task",
 				"icon": "$(add)"
 			},
 			{
-				"command": "roo-cline.mcpButtonClicked",
+				"command": "roo-cline-auto.mcpButtonClicked",
 				"title": "MCP Servers",
 				"icon": "$(server)"
 			},
 			{
-				"command": "roo-cline.promptsButtonClicked",
+				"command": "roo-cline-auto.promptsButtonClicked",
 				"title": "Prompts",
 				"icon": "$(notebook)"
 			},
 			{
-				"command": "roo-cline.historyButtonClicked",
+				"command": "roo-cline-auto.historyButtonClicked",
 				"title": "History",
 				"icon": "$(history)"
 			},
 			{
-				"command": "roo-cline.popoutButtonClicked",
+				"command": "roo-cline-auto.popoutButtonClicked",
 				"title": "Open in Editor",
 				"icon": "$(link-external)"
 			},
 			{
-				"command": "roo-cline.settingsButtonClicked",
+				"command": "roo-cline-auto.settingsButtonClicked",
 				"title": "Settings",
 				"icon": "$(settings-gear)"
 			},
 			{
-				"command": "roo-cline.helpButtonClicked",
+				"command": "roo-cline-auto.helpButtonClicked",
 				"title": "Documentation",
 				"icon": "$(question)"
 			},
 			{
-				"command": "roo-cline.openInNewTab",
+				"command": "roo-cline-auto.performanceButtonClicked",
+				"title": "Performance",
+				"icon": "$(pulse)"
+			},
+			{
+				"command": "roo-cline-auto.openInNewTab",
 				"title": "Open In New Tab",
-				"category": "Roo Code"
+				"category": "Roo Code Auto"
 			},
 			{
-				"command": "roo-cline.explainCode",
-				"title": "Roo Code: Explain Code",
-				"category": "Roo Code"
+				"command": "roo-cline-auto.explainCode",
+				"title": "Roo Code Auto: Explain Code",
+				"category": "Roo Code Auto"
 			},
 			{
-				"command": "roo-cline.fixCode",
-				"title": "Roo Code: Fix Code",
-				"category": "Roo Code"
+				"command": "roo-cline-auto.fixCode",
+				"title": "Roo Code Auto: Fix Code",
+				"category": "Roo Code Auto"
 			},
 			{
-				"command": "roo-cline.improveCode",
-				"title": "Roo Code: Improve Code",
-				"category": "Roo Code"
+				"command": "roo-cline-auto.improveCode",
+				"title": "Roo Code Auto: Improve Code",
+				"category": "Roo Code Auto"
 			},
 			{
-				"command": "roo-cline.addToContext",
-				"title": "Roo Code: Add To Context",
-				"category": "Roo Code"
+				"command": "roo-cline-auto.addToContext",
+				"title": "Roo Code Auto: Add To Context",
+				"category": "Roo Code Auto"
 			}
 		],
 		"menus": {
 			"editor/context": [
 				{
-					"command": "roo-cline.explainCode",
+					"command": "roo-cline-auto.explainCode",
 					"when": "editorHasSelection",
-					"group": "Roo Code@1"
+					"group": "Roo Code Auto@1"
 				},
 				{
-					"command": "roo-cline.fixCode",
+					"command": "roo-cline-auto.fixCode",
 					"when": "editorHasSelection",
-					"group": "Roo Code@2"
+					"group": "Roo Code Auto@2"
 				},
 				{
-					"command": "roo-cline.improveCode",
+					"command": "roo-cline-auto.improveCode",
 					"when": "editorHasSelection",
-					"group": "Roo Code@3"
+					"group": "Roo Code Auto@3"
 				},
 				{
-					"command": "roo-cline.addToContext",
+					"command": "roo-cline-auto.addToContext",
 					"when": "editorHasSelection",
-					"group": "Roo Code@4"
+					"group": "Roo Code Auto@4"
 				}
 			],
 			"view/title": [
 				{
-					"command": "roo-cline.plusButtonClicked",
+					"command": "roo-cline-auto.plusButtonClicked",
 					"group": "navigation@1",
-					"when": "view == roo-cline.SidebarProvider"
+					"when": "view == roo-cline-auto.SidebarProvider"
 				},
 				{
-					"command": "roo-cline.promptsButtonClicked",
+					"command": "roo-cline-auto.promptsButtonClicked",
 					"group": "navigation@2",
-					"when": "view == roo-cline.SidebarProvider"
+					"when": "view == roo-cline-auto.SidebarProvider"
 				},
 				{
-					"command": "roo-cline.mcpButtonClicked",
+					"command": "roo-cline-auto.mcpButtonClicked",
 					"group": "navigation@3",
-					"when": "view == roo-cline.SidebarProvider"
+					"when": "view == roo-cline-auto.SidebarProvider"
 				},
 				{
-					"command": "roo-cline.historyButtonClicked",
+					"command": "roo-cline-auto.historyButtonClicked",
 					"group": "navigation@4",
-					"when": "view == roo-cline.SidebarProvider"
+					"when": "view == roo-cline-auto.SidebarProvider"
 				},
 				{
-					"command": "roo-cline.popoutButtonClicked",
+					"command": "roo-cline-auto.popoutButtonClicked",
 					"group": "navigation@5",
-					"when": "view == roo-cline.SidebarProvider"
+					"when": "view == roo-cline-auto.SidebarProvider"
 				},
 				{
-					"command": "roo-cline.settingsButtonClicked",
+					"command": "roo-cline-auto.settingsButtonClicked",
 					"group": "navigation@6",
-					"when": "view == roo-cline.SidebarProvider"
+					"when": "view == roo-cline-auto.SidebarProvider"
 				},
 				{
-					"command": "roo-cline.helpButtonClicked",
+					"command": "roo-cline-auto.helpButtonClicked",
 					"group": "navigation@7",
-					"when": "view == roo-cline.SidebarProvider"
+					"when": "view == roo-cline-auto.SidebarProvider"
+				},
+				{
+					"command": "roo-cline-auto.performanceButtonClicked",
+					"group": "navigation@4.5",
+					"when": "view == roo-cline-auto.SidebarProvider"
 				}
 			]
 		},
 		"configuration": {
-			"title": "Roo Code",
+			"title": "Roo Code Auto",
 			"properties": {
-				"roo-cline.allowedCommands": {
+				"roo-cline-auto.allowedCommands": {
 					"type": "array",
 					"items": {
 						"type": "string"
@@ -209,7 +219,7 @@
 					],
 					"description": "Commands that can be auto-executed when 'Always approve execute operations' is enabled"
 				},
-				"roo-cline.vsCodeLmModelSelector": {
+				"roo-cline-auto.vsCodeLmModelSelector": {
 					"type": "object",
 					"properties": {
 						"vendor": {

@@ -63,6 +63,12 @@ export interface ApiHandlerOptions {
 	openAiStreamingEnabled?: boolean
 	deepSeekBaseUrl?: string
 	deepSeekApiKey?: string
+	deepSeekModelId?: string
+	deepSeekCustomModelInfo?: ModelInfo
+	deepSeekJsonMode?: boolean
+	deepSeekEnableKvCache?: boolean
+	deepSeekEnableFunctionCalling?: boolean
+	deepSeekForceFunctionCalling?: boolean
 	includeMaxTokens?: boolean
 	unboundApiKey?: string
 	unboundModelId?: string
@@ -117,7 +123,13 @@ export const API_CONFIG_KEYS: GlobalStateKey[] = [
 	"azureApiVersion",
 	"openRouterUseMiddleOutTransform",
 	"openAiStreamingEnabled",
-	// "deepSeekBaseUrl", //  not exist on GlobalStateKey
+	"deepSeekBaseUrl",
+	"deepSeekModelId",
+	"deepSeekCustomModelInfo",
+	"deepSeekJsonMode",
+	"deepSeekEnableKvCache",
+	"deepSeekEnableFunctionCalling",
+	"deepSeekForceFunctionCalling",
 	// "includeMaxTokens", // not exist on GlobalStateKey
 	"unboundModelId",
 	"unboundModelInfo",
@@ -810,7 +822,7 @@ export const openAiNativeModels = {
 } as const satisfies Record<string, ModelInfo>
 
 // DeepSeek
-// https://platform.deepseek.com/docs/api
+// https://api-docs.deepseek.com/
 export type DeepSeekModelId = keyof typeof deepSeekModels
 export const deepSeekDefaultModelId: DeepSeekModelId = "deepseek-chat"
 export const deepSeekModels = {
@@ -818,23 +830,37 @@ export const deepSeekModels = {
 		maxTokens: 8192,
 		contextWindow: 64_000,
 		supportsImages: false,
+		supportsComputerUse: true,
 		supportsPromptCache: true,
 		inputPrice: 0.27, // $0.27 per million tokens (cache miss)
 		outputPrice: 1.1, // $1.10 per million tokens
 		cacheWritesPrice: 0.27, // $0.27 per million tokens (cache miss)
-		cacheReadsPrice: 0.07, // $0.07 per million tokens (cache hit).
-		description: `DeepSeek-V3 achieves a significant breakthrough in inference speed over previous models. It tops the leaderboard among open-source models and rivals the most advanced closed-source models globally.`,
+		cacheReadsPrice: 0.07, // $0.07 per million tokens (cache hit)
+		description: `DeepSeek-V3 achieves a significant breakthrough in inference speed over previous models. It tops the leaderboard among open-source models and rivals the most advanced closed-source models globally. Supports function calling, JSON mode, and KV cache for improved performance.`,
 	},
 	"deepseek-reasoner": {
 		maxTokens: 8192,
 		contextWindow: 64_000,
 		supportsImages: false,
+		supportsComputerUse: true,
 		supportsPromptCache: true,
 		inputPrice: 0.55, // $0.55 per million tokens (cache miss)
 		outputPrice: 2.19, // $2.19 per million tokens
 		cacheWritesPrice: 0.55, // $0.55 per million tokens (cache miss)
 		cacheReadsPrice: 0.14, // $0.14 per million tokens (cache hit)
-		description: `DeepSeek-R1 achieves performance comparable to OpenAI-o1 across math, code, and reasoning tasks. Supports Chain of Thought reasoning with up to 32K tokens.`,
+		description: `DeepSeek-R1 achieves performance comparable to OpenAI-o1 across math, code, and reasoning tasks. Supports Chain of Thought reasoning with up to 32K tokens. Excellent for complex problem-solving, mathematical reasoning, and code generation tasks.`,
+	},
+	"deepseek-coder": {
+		maxTokens: 8192,
+		contextWindow: 128_000,
+		supportsImages: false,
+		supportsComputerUse: true,
+		supportsPromptCache: true,
+		inputPrice: 0.35, // $0.35 per million tokens (cache miss)
+		outputPrice: 1.4, // $1.40 per million tokens
+		cacheWritesPrice: 0.35, // $0.35 per million tokens (cache miss)
+		cacheReadsPrice: 0.09, // $0.09 per million tokens (cache hit)
+		description: `DeepSeek Coder is specialized for programming tasks with support for over 40 programming languages. Features include Fill-in-the-Middle (FIM) completion, prefix completion, and enhanced code understanding. Ideal for software development and code-related tasks.`,
 	},
 } as const satisfies Record<string, ModelInfo>
 

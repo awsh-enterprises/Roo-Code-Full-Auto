@@ -649,6 +649,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					JSON.parse(message.text || "{}")?.tool === "switchMode") ||
 				(alwaysAllowSubtasks &&
 					message.ask === "tool" &&
+					JSON.parse(message.text || "{}")?.tool === "finishTask") ||
+				(alwaysAllowCommandOutput && message.ask === "command_output")
 					["newTask", "finishTask"].includes(JSON.parse(message.text || "{}")?.tool))
 			)
 		},
@@ -664,6 +666,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			alwaysAllowMcp,
 			isMcpToolAlwaysAllowed,
 			alwaysAllowModeSwitch,
+			alwaysAllowFinishTask,
+			alwaysAllowCommandOutput,
 			alwaysAllowSubtasks,
 		],
 	)
@@ -923,7 +927,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						href="#"
 						onClick={(e) => {
 							e.preventDefault()
-							window.postMessage({ type: "action", action: "settingsButtonClicked" }, "*")
+							vscode.postMessage({ type: "settingsButtonClicked" })
 						}}
 						className="inline px-0.5">
 						disable checkpoints in settings

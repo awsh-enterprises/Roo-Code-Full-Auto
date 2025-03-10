@@ -102,6 +102,11 @@ export interface WebviewMessage {
 		| "browserToolEnabled"
 		| "telemetrySetting"
 		| "showRooIgnoredFiles"
+		| "deepSeekJsonMode"
+		| "deepSeekEnableKvCache"
+		| "deepSeekEnableFunctionCalling"
+		| "deepSeekForceFunctionCalling"
+		| "settingsButtonClicked"
 	text?: string
 	disabled?: boolean
 	askResponse?: ClineAskResponse

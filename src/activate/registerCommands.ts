@@ -47,7 +47,7 @@ export const registerCommands = (options: RegisterCommandOptions) => {
 	// Human Relay Dialog Command
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
-			"roo-cline.showHumanRelayDialog",
+			"roo-cline-auto.showHumanRelayDialog",
 			(params: { requestId: string; promptText: string }) => {
 				if (getPanel()) {
 					getPanel()?.webview.postMessage({
@@ -63,26 +63,29 @@ export const registerCommands = (options: RegisterCommandOptions) => {
 
 const getCommandsMap = ({ context, outputChannel, provider }: RegisterCommandOptions) => {
 	return {
-		"roo-cline.plusButtonClicked": async () => {
+		"roo-cline-auto.plusButtonClicked": async () => {
 			await provider.removeClineFromStack()
 			await provider.postStateToWebview()
 			await provider.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
 		},
-		"roo-cline.mcpButtonClicked": () => {
+		"roo-cline-auto.mcpButtonClicked": () => {
 			provider.postMessageToWebview({ type: "action", action: "mcpButtonClicked" })
 		},
-		"roo-cline.promptsButtonClicked": () => {
+		"roo-cline-auto.promptsButtonClicked": () => {
 			provider.postMessageToWebview({ type: "action", action: "promptsButtonClicked" })
 		},
-		"roo-cline.popoutButtonClicked": () => openClineInNewTab({ context, outputChannel }),
-		"roo-cline.openInNewTab": () => openClineInNewTab({ context, outputChannel }),
-		"roo-cline.settingsButtonClicked": () => {
+		"roo-cline-auto.popoutButtonClicked": () => openClineInNewTab({ context, outputChannel }),
+		"roo-cline-auto.openInNewTab": () => openClineInNewTab({ context, outputChannel }),
+		"roo-cline-auto.settingsButtonClicked": () => {
 			provider.postMessageToWebview({ type: "action", action: "settingsButtonClicked" })
 		},
-		"roo-cline.historyButtonClicked": () => {
+		"roo-cline-auto.historyButtonClicked": () => {
 			provider.postMessageToWebview({ type: "action", action: "historyButtonClicked" })
 		},
-		"roo-cline.helpButtonClicked": () => {
+		"roo-cline-auto.performanceButtonClicked": () => {
+			provider.postMessageToWebview({ type: "action", action: "performanceButtonClicked" })
+		},
+		"roo-cline-auto.helpButtonClicked": () => {
 			vscode.env.openExternal(vscode.Uri.parse("https://docs.roocode.com"))
 		},
 	}

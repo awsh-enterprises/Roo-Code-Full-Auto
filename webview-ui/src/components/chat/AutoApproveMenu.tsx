@@ -62,6 +62,13 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 				"Allows execution of approved terminal commands. You can configure this in the settings panel.",
 		},
 		{
+			id: "commandOutput",
+			label: "Continue while commands run",
+			shortName: "CmdOutput",
+			enabled: alwaysAllowCommandOutput ?? false,
+			description: "Automatically continue execution while commands are running without prompting.",
+		},
+		{
 			id: "useBrowser",
 			label: "Use the browser",
 			shortName: "Browser",
@@ -150,6 +157,12 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 		vscode.postMessage({ type: "alwaysAllowSubtasks", bool: newValue })
 	}, [alwaysAllowSubtasks, setAlwaysAllowSubtasks])
 
+	const handleCommandOutputChange = useCallback(() => {
+		const newValue = !(alwaysAllowCommandOutput ?? false)
+		setAlwaysAllowCommandOutput(newValue)
+		vscode.postMessage({ type: "alwaysAllowCommandOutput", bool: newValue })
+	}, [alwaysAllowCommandOutput, setAlwaysAllowCommandOutput])
+
 	const handleRetryChange = useCallback(() => {
 		const newValue = !(alwaysApproveResubmit ?? false)
 		setAlwaysApproveResubmit(newValue)
@@ -161,6 +174,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 		readFiles: handleReadOnlyChange,
 		editFiles: handleWriteChange,
 		executeCommands: handleExecuteChange,
+		commandOutput: handleCommandOutputChange,
 		useBrowser: handleBrowserChange,
 		useMcp: handleMcpChange,
 		switchModes: handleModeSwitchChange,
