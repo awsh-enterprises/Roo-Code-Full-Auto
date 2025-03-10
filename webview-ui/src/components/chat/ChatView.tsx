@@ -64,6 +64,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		alwaysAllowFinishTask,
 		customModes,
 		telemetrySetting,
+		showProceedWhileRunning,
 	} = useExtensionState()
 
 	//const task = messages.length > 0 ? (messages[0].say === "task" ? messages[0] : undefined) : undefined) : undefined
@@ -182,8 +183,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						case "command_output":
 							setTextAreaDisabled(false)
 							setClineAsk("command_output")
-							setEnableButtons(true)
-							setPrimaryButtonText("Proceed While Running")
+							setEnableButtons(showProceedWhileRunning === true)
+							setPrimaryButtonText(showProceedWhileRunning === true ? "Proceed While Running" : undefined)
 							setSecondaryButtonText(undefined)
 							break
 						case "use_mcp_server":
@@ -259,7 +260,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			// setPrimaryButtonText(undefined)
 			// setSecondaryButtonText(undefined)
 		}
-	}, [lastMessage, secondLastMessage])
+	}, [lastMessage, secondLastMessage, showProceedWhileRunning])
 
 	useEffect(() => {
 		if (messages.length === 0) {

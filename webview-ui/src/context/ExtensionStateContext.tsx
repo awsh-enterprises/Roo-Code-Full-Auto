@@ -32,6 +32,8 @@ export interface ExtensionStateContextType extends ExtensionState {
 	setAlwaysAllowMcp: (value: boolean) => void
 	setAlwaysAllowModeSwitch: (value: boolean) => void
 	setAlwaysAllowFinishTask: (value: boolean) => void
+	showProceedWhileRunning?: boolean
+	setShowProceedWhileRunning: (value: boolean) => void
 	setBrowserToolEnabled: (value: boolean) => void
 	setShowRooIgnoredFiles: (value: boolean) => void
 	setShowAnnouncement: (value: boolean) => void
@@ -141,6 +143,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		browserToolEnabled: true,
 		telemetrySetting: "unset",
 		showRooIgnoredFiles: true, // Default to showing .rooignore'd files with lock symbol (current behavior)
+		showProceedWhileRunning: true, // Default to showing the "Proceed While Running" button
 	})
 
 	const [didHydrateState, setDidHydrateState] = useState(false)
@@ -281,6 +284,8 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		setBrowserToolEnabled: (value) => setState((prevState) => ({ ...prevState, browserToolEnabled: value })),
 		setTelemetrySetting: (value) => setState((prevState) => ({ ...prevState, telemetrySetting: value })),
 		setShowRooIgnoredFiles: (value) => setState((prevState) => ({ ...prevState, showRooIgnoredFiles: value })),
+		setShowProceedWhileRunning: (value) =>
+			setState((prevState) => ({ ...prevState, showProceedWhileRunning: value })),
 	}
 
 	return <ExtensionStateContext.Provider value={contextValue}>{children}</ExtensionStateContext.Provider>
