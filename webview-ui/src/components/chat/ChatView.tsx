@@ -182,8 +182,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						case "command_output":
 							setTextAreaDisabled(false)
 							setClineAsk("command_output")
-							setEnableButtons(true)
-							setPrimaryButtonText("Proceed While Running")
+							setEnableButtons(false)
+							setPrimaryButtonText(undefined)
 							setSecondaryButtonText(undefined)
 							break
 						case "use_mcp_server":
@@ -1218,9 +1218,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 																? "Continue the current task"
 																: primaryButtonText === "Proceed Anyways"
 																	? "Continue despite warnings"
-																	: primaryButtonText === "Proceed While Running"
-																		? "Continue while command executes"
-																		: undefined
+																	: undefined
 									}
 									onClick={(e) => handlePrimaryButtonClick(inputValue, selectedImages)}>
 									{primaryButtonText}
