@@ -7,7 +7,7 @@ import { CustomSupportPrompts } from "./support-prompt"
 import { ExperimentId } from "./experiments"
 import { CheckpointStorage } from "./checkpoints"
 import { TelemetrySetting } from "./TelemetrySetting"
-import { ClineMessage, ClineAsk, ClineSay } from "../exports/roo-code"
+import type { ClineMessage, ClineAsk, ClineSay } from "../exports/roo-code"
 
 export interface LanguageModelChatSelector {
 	vendor?: string
@@ -131,9 +131,9 @@ export interface ExtensionState {
 	remoteBrowserHost?: string
 	remoteBrowserEnabled?: boolean
 	fuzzyMatchThreshold?: number
-	preferredLanguage: string
+	language?: string
 	writeDelayMs: number
-	terminalOutputLimit?: number
+	terminalOutputLineLimit?: number
 	mcpEnabled: boolean
 	enableMcpServerCreation: boolean
 	enableCustomModeCreation?: boolean
@@ -231,3 +231,8 @@ export interface HumanRelayCancelMessage {
 }
 
 export type ClineApiReqCancelReason = "streaming_failed" | "user_cancelled"
+
+export type ToolProgressStatus = {
+	icon?: string
+	text?: string
+}
